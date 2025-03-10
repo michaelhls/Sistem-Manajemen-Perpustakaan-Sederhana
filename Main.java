@@ -1,6 +1,5 @@
-class User {
-    public void interact() {
-    }
+abstract class User {
+    public abstract void interact();
 }
 
 class Admin extends User {
