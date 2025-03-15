@@ -1,13 +1,14 @@
 import java.util.Scanner;
 
 abstract class User {
+    protected final Scanner scanner = new Scanner(System.in);
+
     public abstract void interact();
 }
 
 class Admin extends User {
     protected static Book[] books = new Book[100];
     protected static int bookCount = 0;
-    private final Scanner scanner = new Scanner(System.in);
 
     private int getBook(final String title) {
         for (int i = 0; i < bookCount; i++) {
@@ -15,6 +16,7 @@ class Admin extends User {
                 return i;
             }
         }
+
         return -1;
     }
 
@@ -36,6 +38,7 @@ class Admin extends User {
 
     private void removeBook() {
         System.out.print("Masukkan judul buku yang akan dihapus: ");
+
         final String title = scanner.nextLine();
         final int bookIndex = getBook(title);
 
@@ -45,6 +48,7 @@ class Admin extends User {
             for (int j = bookIndex; j < bookCount - 1; j++) {
                 books[j] = books[j + 1];
             }
+
             books[--bookCount] = null;
             System.out.println("Buku '" + title + "' berhasil dihapus.");
         }
@@ -52,6 +56,7 @@ class Admin extends User {
 
     private void searchBook() {
         System.out.print("Masukkan judul buku yang dicari: ");
+
         final String title = scanner.nextLine();
         final int bookIndex = getBook(title);
 
@@ -64,10 +69,12 @@ class Admin extends User {
 
     private void viewBooks() {
         System.out.println("\n=== Daftar Buku Tersedia ===");
+
         if (bookCount == 0) {
             System.out.println("Tidak ada buku di perpustakaan.");
             return;
         }
+        
         for (int i = 0; i < bookCount; i++) {
             System.out.println(books[i]);
         }
@@ -116,8 +123,6 @@ class Admin extends User {
 }
 
 class Member extends User {
-    private final Scanner scanner = new Scanner(System.in);
-
     @Override
     public void interact() {
         System.out.println("Selamat datang, Member!");
@@ -165,15 +170,18 @@ class Member extends User {
                 return i;
             }
         }
+
         return -1;
     }
 
     private void viewBooks() {
         System.out.println("\n=== Daftar Buku Tersedia ===");
+        
         if (Admin.bookCount == 0) {
             System.out.println("Tidak ada buku di perpustakaan.");
             return;
         }
+
         for (int i = 0; i < Admin.bookCount; i++) {
             if (Admin.books[i].isAvailable()) {
                 System.out.println(Admin.books[i]);
@@ -183,8 +191,9 @@ class Member extends User {
 
     private void searchBook() {
         System.out.print("Masukkan judul buku yang dicari: ");
-        String title = scanner.nextLine();
-        int bookIndex = getBook(title);
+
+        final String title = scanner.nextLine();
+        final int bookIndex = getBook(title);
 
         if (bookIndex == -1) {
             System.out.println("Buku '" + title + "' tidak ditemukan.");
@@ -195,8 +204,9 @@ class Member extends User {
 
     private void borrowBook() {
         System.out.print("Masukkan judul buku yang ingin dipinjam: ");
-        String title = scanner.nextLine();
-        int bookIndex = getBook(title);
+        
+        final String title = scanner.nextLine();
+        final int bookIndex = getBook(title);
 
         if (bookIndex == -1 || !Admin.books[bookIndex].isAvailable()) {
             System.out.println("Buku tidak tersedia untuk dipinjam.");
@@ -208,8 +218,9 @@ class Member extends User {
 
     private void returnBook() {
         System.out.print("Masukkan judul buku yang ingin dikembalikan: ");
-        String title = scanner.nextLine();
-        int bookIndex = getBook(title);
+        
+        final String title = scanner.nextLine();
+        final int bookIndex = getBook(title);
 
         if (bookIndex == -1 || Admin.books[bookIndex].isAvailable()) {
             System.out.println("Buku tidak dapat dikembalikan (mungkin sudah tersedia).");
@@ -253,8 +264,8 @@ public class Main {
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        User admin = new Admin();
-        User member = new Member();
+        final User admin = new Admin();
+        final User member = new Member();
 
         while (true) {
             System.out.print("\n=== Sistem Manajemen Perpustakaan ===\n" +
@@ -262,7 +273,8 @@ public class Main {
                     "2. Masuk sebagai Member\n" +
                     "3. Keluar\n" +
                     "Masuk sebagai? (1-3): ");
-            int roleChoice = scanner.nextInt();
+            
+            final int roleChoice = scanner.nextInt();
             scanner.nextLine();
 
             switch (roleChoice) {
