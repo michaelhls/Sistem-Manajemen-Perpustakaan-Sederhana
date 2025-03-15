@@ -159,6 +159,15 @@ class Member extends User {
         }
     }
 
+    private int getBook(String title) {
+        for (int i = 0; i < Admin.bookCount; i++) {
+            if (Admin.books[i].getTitle().equalsIgnoreCase(title)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     private void viewBooks() {
         System.out.println("\n=== Daftar Buku Tersedia ===");
         if (Admin.bookCount == 0) {
@@ -208,15 +217,6 @@ class Member extends User {
             Admin.books[bookIndex].setAvailable(true);
             System.out.println("Buku '" + title + "' berhasil dikembalikan.");
         }
-    }
-
-    private int getBook(String title) {
-        for (int i = 0; i < Admin.bookCount; i++) {
-            if (Admin.books[i].getTitle().equalsIgnoreCase(title)) {
-                return i;
-            }
-        }
-        return -1;
     }
 }
 
