@@ -7,14 +7,27 @@ abstract class User {
 class Admin extends User {
     private static Book[] books = new Book[100];
     private static int bookCount = 0;
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
-    // menambahkan buku
+    // Cari buku dari suatu judul dan kembalikan indeksnya, atau -1 apabila tidak ada
+    private int getBook(final String title) {
+        for (int i = 0; i < bookCount; i++) {
+            if (books[i].getTitle().equalsIgnoreCase(title)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    // Menambahkan buku
     private void addBook() {
         System.out.print("Masukkan judul buku: ");
-        String title = scanner.nextLine();
+        final String title = scanner.nextLine();
+
         System.out.print("Masukkan nama pengarang: ");
-        String author = scanner.nextLine();
+        final String author = scanner.nextLine();
+        
         if (bookCount < books.length) {
             books[bookCount] = new Book(title, author);
             bookCount++;
@@ -24,48 +37,52 @@ class Admin extends User {
         }
     }
 
-    // menghapus buku
+    // Menghapus buku
     private void removeBook() {
         System.out.print("Masukkan judul buku yang akan dihapus: ");
-        String title = scanner.nextLine();
-        for (int i = 0; i < bookCount; i++) {
-            if (books[i].getTitle().equalsIgnoreCase(title)) {
-                for (int j = i; j < bookCount - 1; j++) {
-                    books[j] = books[j + 1];
-                }
-                books[bookCount - 1] = null;
-                bookCount--;
-                System.out.println("Buku '" + title + "' berhasil dihapus.");
-                return;
+        final String title = scanner.nextLine();
+        final int bookIndex = getBook(title);
+
+        if (bookIndex == -1) {
+            System.out.println("Buku '" + title + "' tidak ditemukan.");
+        } else {
+            for (int j = bookIndex; j < bookCount - 1; j++) {
+                books[j] = books[j + 1];
             }
+
+            books[--bookCount] = null;
+            
+            System.out.println("Buku '" + title + "' berhasil dihapus.");
         }
-        System.out.println("Buku '" + title + "' tidak ditemukan.");
     }
 
-    // mencari buku
+    // Mencari buku
     private void searchBook() {
         System.out.print("Masukkan judul buku yang dicari: ");
-        String title = scanner.nextLine();
-        for (int i = 0; i < bookCount; i++) {
-            if (books[i].getTitle().equalsIgnoreCase(title)) {
-                System.out.println("Buku ditemukan: " + books[i]);
-                return;
-            }
+        final String title = scanner.nextLine();
+        final int bookIndex = getBook(title);
+
+        if (bookIndex == -1) {
+            System.out.println("Buku '" + title + "' tidak ditemukan.");
+        } else {
+            System.out.println("Buku ditemukan:\n" + books[bookIndex]);
         }
-        System.out.println("Buku '" + title + "' tidak ditemukan.");
     }
 
-    // menu Admin
+    // Menu admin
     private void showAdminMenu() {
         while (true) {
-            System.out.println("\n=== Menu Admin ===");
-            System.out.println("1. Tambah Buku");
-            System.out.println("2. Hapus Buku");
-            System.out.println("3. Cari Buku");
-            System.out.println("4. Keluar");
-            System.out.print("Pilih opsi (1-4): ");
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Membersihkan buffer
+            System.out.print("\n=== Menu Admin ===\n" +
+                             "1. Tambah Buku\n" +
+                             "2. Hapus Buku\n" +
+                             "3. Cari Buku\n" +
+                             "4. Keluar\n" +
+                             "Pilih opsi (1-4): ");
+            
+            final int choice = scanner.nextInt();
+
+            // Bersihkan buffer
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
@@ -89,6 +106,7 @@ class Admin extends User {
     @Override
     public void interact() {
         System.out.println("Selamat datang, Admin!");
+
         showAdminMenu();
     }
 }
@@ -97,13 +115,13 @@ class Member extends User {
     @Override
     public void interact() {
         System.out.println("Selamat datang, Member!");
-        // belum ada menu
+        // Belum ada menu
     }
 }
 
 class Book {
-    private String title;
-    private String author;
+    private final String title;
+    private final String author;
     private boolean isAvailable;
 
     public Book(String title, String author) {
@@ -135,18 +153,18 @@ class Book {
 }
 
 public class Main {
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         User admin = new Admin();
         User member = new Member();
 
         while (true) {
-            System.out.println("\n=== Sistem Manajemen Perpustakaan ===");
-            System.out.println("1. Masuk sebagai Admin");
-            System.out.println("2. Masuk sebagai Member");
-            System.out.println("3. Keluar");
-            System.out.print("Masuk sebagai? (1-3): ");
+            System.out.print("\n=== Sistem Manajemen Perpustakaan ===\n" +
+                             "1. Masuk sebagai Admin\n" +
+                             "2. Masuk sebagai Member\n" +
+                             "3. Keluar\n" +
+                             "Masuk sebagai? (1-3): ");
             int roleChoice = scanner.nextInt();
             scanner.nextLine(); 
 
