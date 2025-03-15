@@ -63,7 +63,7 @@ class Admin extends User {
     }
 
     private void viewBooks() {
-        System.out.println("\n=== Daftar Buku Tersedia ===");
+        System.out.println("\n=== Daftar Buku ===");
         if (bookCount == 0) {
             System.out.println("Tidak ada buku di perpustakaan.");
             return;
